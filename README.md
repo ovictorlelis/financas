@@ -28,6 +28,14 @@ Você deve acessar a pasta _public_ do projeto.
 
 O ideal é criar um _**alias**_ específico no servidor que direcione diretamente para a pasta _public_.
 
+## Utilização
+
+Após a configuração faça a importação do banco de dados
+
+> finances.sql
+
+Para se registrar deve utilizar um código de convite, o primeiro registro poderá ser criado utilizando o código `test`
+
 ### Painel
 
 ![Finanças (6)](https://user-images.githubusercontent.com/39639652/131227505-f9d67bae-3ee4-4d38-b905-4396dbcb0979.png)
