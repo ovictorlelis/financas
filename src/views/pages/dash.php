@@ -124,7 +124,7 @@
                             R$ <?= number_format($transaction['amount'], 2, ',', '.'); ?>
                           </td>
                           <td class="text-muted">
-                            <?= (new DateTime($transaction['date']))->format('d/m/Y \á\s H:i'); ?>
+                            <?= (new DateTime($transaction['date']))->format('d/m/Y'); ?>
                           </td>
                           <td>
                             <a href="#" class="text-dark me-2" onclick="dataEdit('<?= $transaction['id']; ?>','<?= ucfirst($transaction['description']); ?>', '<?= $transaction['amount']; ?>', '<?= (new DateTime($transaction['date']))->format('Y-m-d');; ?>', '<?= $transaction['type']; ?>', '<?= $transaction['wallet_id']; ?>', '<?= $transaction['paid']; ?>')" data-bs-toggle="modal" data-bs-target="#viewTransaction"><i class="fas fa-expand"></i></a>

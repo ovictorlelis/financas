@@ -43,7 +43,7 @@ class DashController extends Controller
             ->where('description', 'LIKE', "%{$search}%")
             ->where('type', 'LIKE', "{$filter}")
             ->where('date', 'LIKE', "%{$dateSearch}%")
-            ->orderBy('date', 'desc')
+            ->orderBy(['date', 'id'], 'desc')
             ->get();
 
         $incomes = $transaction
@@ -423,7 +423,7 @@ class DashController extends Controller
                 "amount" => $amount,
                 "type" => $type,
                 "wallet_id" => $wallet,
-                "date" => $date . date(' H:i:s'),
+                "date" => $date,
             ])
             ->execute();
 
@@ -545,7 +545,7 @@ class DashController extends Controller
     public function paid($params)
     {
         $id = filter_var($params['id'], FILTER_VALIDATE_INT);
-        $bool = filter_var($params['bool'], FILTER_VALIDATE_BOOL);
+        $bool = filter_var($params['bool'], FILTER_VALIDATE_BOOLEAN);
 
         $url = $this->getFilters();
 
