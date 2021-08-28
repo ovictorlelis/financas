@@ -1,0 +1,1 @@
+<p class="text-center my-1"><?= $message ?? '' ?></p>
