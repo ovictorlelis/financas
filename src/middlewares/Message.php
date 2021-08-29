@@ -50,6 +50,9 @@ class Message
       case 540:
         return 'Transação marcado como não pago!';
         break;
+      case 550:
+        return 'Transação paga, marque como não paga para alterar o tipo!';
+        break;
 
       case 610:
         return 'Carteira adicionada com sucesso!';
