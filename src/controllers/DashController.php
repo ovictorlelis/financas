@@ -500,38 +500,8 @@ class DashController extends Controller
         $type = $this->getType($edit_amount);
         $amount = $this->getAmount($edit_amount);
 
-        $currentTransaction = (new Transaction())
-            ->select()
-            ->where("id", $id)
-            ->where('tenant_id', $this->user->tenant_id)
-            ->first();
-
-        if ($type != $transaction['type'] && $transaction['paid'] == 1) {
+        if ($transaction['paid'] == 1) {
             $this->redirect("/dashboard{$url}&message=550");
-        }
-
-        if ($currentTransaction['wallet_id'] != $edit_wallet && $currentTransaction['paid'] == 1) {
-            $currentWallet = (new Wallet())
-                ->select()
-                ->where('id', $currentTransaction['wallet_id'])
-                ->where('tenant_id', $this->user->tenant_id)
-                ->first();
-
-            $balance = $this->newBalance('expense', $currentTransaction['type'], $currentWallet['amount'], $currentTransaction['amount']);
-
-            (new Wallet())
-                ->update([
-                    "amount" => $balance
-                ])
-                ->where('id', $currentTransaction['wallet_id'])
-                ->execute();
-
-            (new Wallet())
-                ->update([
-                    "amount" => $amount
-                ])
-                ->where('id', $edit_wallet)
-                ->execute();
         }
 
         (new Transaction())
