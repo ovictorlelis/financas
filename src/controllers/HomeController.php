@@ -43,6 +43,11 @@ class HomeController extends Controller
     public function register()
     {
         $message = Message::get();
+
+        if (UserMiddleware::auth()) {
+            $this->redirect('/dashboard');
+        }
+
         $invite = filter_input(INPUT_GET, 'invite', FILTER_SANITIZE_STRING) ?? '';
         $this->render('register', [
             "invite" => $invite,
