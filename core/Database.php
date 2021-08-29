@@ -15,7 +15,8 @@ class Database
                     Config::DB_DATABASE . ";host=" .
                     Config::DB_HOST,
                 Config::DB_USER,
-                Config::DB_PASS
+                Config::DB_PASS,
+                array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
             );
         }
         return self::$_pdo;
