@@ -32,11 +32,11 @@
                 <form method="POST">
                   <div class="mb-3">
                     <label for="name">Nome</label>
-                    <input type="text" name="name" id="name" class="form-control border">
+                    <input type="text" name="name" id="name" class="form-control border" value="<?= old('name'); ?>">
                   </div>
                   <div class="mb-3">
                     <label for="email">E-mail</label>
-                    <input type="text" name="email" id="email" class="form-control border">
+                    <input type="text" name="email" id="email" class="form-control border" value="<?= old('email'); ?>">
                   </div>
                   <div class="mb-3">
                     <label for="password">Senha</label>
@@ -44,7 +44,7 @@
                   </div>
                   <div class="mb-3">
                     <label for="invite">Convite</label>
-                    <input type="text" name="invite" id="invite" class="form-control border" value="<?= $invite; ?>">
+                    <input type="text" name="invite" id="invite" class="form-control border" value="<?= $invite ?>">
                   </div>
                   <input type="submit" value="Cadastrar" class="btn btn-dark w-100">
 

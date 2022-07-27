@@ -17,7 +17,7 @@ class HomeController extends Controller
         $message = Message::get();
 
         if (UserMiddleware::auth()) {
-            route()->redirect('/dashboard');
+            return route()->redirect('/dashboard');
         }
 
         $this->render('login', [
@@ -31,13 +31,13 @@ class HomeController extends Controller
         $pass = filter_input(INPUT_POST, 'password');
 
         if (!$email && !$pass) {
-            route()->redirect('/?message=105');
+            return route()->redirect('/?message=105');
         }
 
         if (UserMiddleware::login($email, $pass)) {
-            route()->redirect('/dashboard');
+            return route()->redirect('/dashboard');
         }
-        route()->redirect('/?message=110');
+        return route()->redirect('/?message=110');
     }
 
     public function register()
@@ -45,10 +45,15 @@ class HomeController extends Controller
         $message = Message::get();
 
         if (UserMiddleware::auth()) {
-            route()->redirect('/dashboard');
+            return route()->redirect('/dashboard');
         }
 
         $invite = filter_input(INPUT_GET, 'invite') ?? '';
+
+        if (!$invite && session()->has(['old', 'invite'])) {
+            $invite = old('invite');
+        }
+
         $this->render('register', [
             "invite" => $invite,
             "message" => $message
@@ -69,10 +74,11 @@ class HomeController extends Controller
 
 
         if (!$invitation) {
-            route()->redirect('/register?message=115');
+            return route()->redirect('/register?message=115');
         }
-        if (!!$invitation->user_id) {
-            route()->redirect('/register?message=115');
+
+        if ($invitation->user_id) {
+            return route()->redirect('/register?message=115');
         }
 
         (new User())
@@ -118,13 +124,13 @@ class HomeController extends Controller
             ->execute();
 
         if (UserMiddleware::login($email, $password)) {
-            route()->redirect('/dashboard');
+            return route()->redirect('/dashboard');
         }
     }
 
     public function logout()
     {
         session_destroy();
-        route()->redirect('/');
+        return route()->redirect('/');
     }
 }

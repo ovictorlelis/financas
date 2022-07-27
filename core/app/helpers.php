@@ -1,7 +1,7 @@
 <?php
 define('ROOT', __DIR__ . '/../../');
 
-function old()
+function old(string $key = null)
 {
   $data = new class
   {
@@ -15,6 +15,10 @@ function old()
       return session()->get(['old', $key]);
     }
   };
+
+  if ($key) {
+    return $data->get($key);
+  }
 
   return $data;
 }

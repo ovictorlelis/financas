@@ -22,7 +22,7 @@ class Message
         return 'Preencha seu e-mail e senha!';
         break;
       case 110:
-        return 'E-mail e senha inválido!';
+        return 'E-mail ou senha inválido!';
         break;
       case 115:
         return 'Convite inválido!';

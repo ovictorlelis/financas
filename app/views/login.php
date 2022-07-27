@@ -32,7 +32,7 @@
                 <form method="POST">
                   <div class="mb-3">
                     <label for="email">E-mail</label>
-                    <input type="text" name="email" id="email" class="form-control border">
+                    <input type="text" name="email" id="email" class="form-control border" value="<?= old('email'); ?>">
                   </div>
                   <div class="mb-3">
                     <label for="password">Senha</label>
