@@ -1,8 +1,8 @@
 <?php
 
-namespace src\models;
+namespace app\models;
 
-use \core\Model;
+use core\Model;
 
 class Wallet extends Model
 {

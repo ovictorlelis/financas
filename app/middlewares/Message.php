@@ -1,6 +1,6 @@
 <?php
 
-namespace src\middlewares;
+namespace app\middlewares;
 
 class Message
 {

@@ -1,9 +1,9 @@
-<?php $render('header'); ?>
+<?php render('header'); ?>
 
 
 <div class="pb-3">
 
-  <?php $render('nav', ["user" => $user]); ?>
+  <?php render('nav', ["user" => $user]); ?>
 
   <div class="container" style="margin-top: -60px;">
     <div class="row justify-content-center">
@@ -101,7 +101,7 @@
 
             <div class="col-12">
 
-              <?php $render('message', ["message" => $message]); ?>
+              <?php render('message', ["message" => $message]); ?>
 
               <?php if ($transactions) :  ?>
                 <div class="table-responsive">
@@ -119,17 +119,17 @@
 
                       <?php foreach ($transactions as $transaction) : ?>
                         <tr>
-                          <td><?= ucfirst($transaction['description']); ?></td>
-                          <td class="<?= $transaction["type"] == 'expense' ? 'text-danger' : 'text-success'; ?>">
-                            R$ <?= number_format($transaction['amount'], 2, ',', '.'); ?>
+                          <td><?= ucfirst($transaction->description); ?></td>
+                          <td class="<?= $transaction->type == 'expense' ? 'text-danger' : 'text-success'; ?>">
+                            R$ <?= number_format($transaction->amount, 2, ',', '.'); ?>
                           </td>
                           <td class="text-muted">
-                            <?= (new DateTime($transaction['date']))->format('d/m/Y'); ?>
+                            <?= (new DateTime($transaction->date))->format('d/m/Y'); ?>
                           </td>
                           <td>
-                            <a href="#" class="text-dark me-2" onclick="dataEdit('<?= $transaction['id']; ?>','<?= ucfirst($transaction['description']); ?>', '<?= $transaction['amount']; ?>', '<?= (new DateTime($transaction['date']))->format('Y-m-d');; ?>', '<?= $transaction['type']; ?>', '<?= $transaction['wallet_id']; ?>', '<?= $transaction['paid']; ?>')" data-bs-toggle="modal" data-bs-target="#viewTransaction"><i class="fas fa-expand"></i></a>
+                            <a href="#" class="text-dark me-2" onclick="dataEdit('<?= $transaction->id; ?>','<?= ucfirst($transaction->description); ?>', '<?= $transaction->amount; ?>', '<?= (new DateTime($transaction->date))->format('Y-m-d');; ?>', '<?= $transaction->type; ?>', '<?= $transaction->wallet_id; ?>', '<?= $transaction->paid; ?>')" data-bs-toggle="modal" data-bs-target="#viewTransaction"><i class="fas fa-expand"></i></a>
 
-                            <a href="#" class="text-danger" onclick="dataRemove('<?= $transaction['id']; ?>', '<?= $transaction['description'] ?>')" data-bs-toggle="modal" data-bs-target="#removeTransaction"><i class="fas fa-trash"></i></a>
+                            <a href="#" class="text-danger" onclick="dataRemove('<?= $transaction->id; ?>', '<?= $transaction->description ?>')" data-bs-toggle="modal" data-bs-target="#removeTransaction"><i class="fas fa-trash"></i></a>
                           </td>
                         </tr>
                       <?php endforeach; ?>
@@ -196,7 +196,7 @@
             <label for="wallet">Carteira</label>
             <select class="form-control" name="wallet" id="wallet">
               <?php foreach ($wallets as $wallet) :  ?>
-                <option value="<?= $wallet['id']; ?>"><?= $wallet['name']; ?></option>
+                <option value="<?= $wallet->id; ?>"><?= $wallet->name; ?></option>
               <?php endforeach;  ?>
             </select>
           </div>
@@ -240,7 +240,7 @@
             <label for="edit_wallet">Carteira</label>
             <select class="form-control" name="edit_wallet" id="edit_wallet">
               <?php foreach ($wallets as $wallet) :  ?>
-                <option id="<?= $wallet['id']; ?>" value="<?= $wallet['id']; ?>"><?= $wallet['name']; ?></option>
+                <option id="<?= $wallet->id; ?>" value="<?= $wallet->id; ?>"><?= $wallet->name; ?></option>
               <?php endforeach;  ?>
             </select>
           </div>
@@ -309,7 +309,7 @@
 
     let form = document.querySelector("#editWallet");
 
-    form.action = "<?= $base; ?>/dashboard/edit/" + id + "/" + window.location.search;
+    form.action = "<?= route('/'); ?>dashboard/edit/" + id + "/" + window.location.search;
 
 
     if (editPaid == 1) {
@@ -353,11 +353,11 @@
   }
 
   function paidButton(bool) {
-    window.location.href = "<?= $base; ?>/dashboard/paid/" + id + "/" + bool + "/" + window.location.search;
+    window.location.href = "<?= route('/'); ?>dashboard/paid/" + id + "/" + bool + "/" + window.location.search;
   }
 
   function remove() {
-    window.location.href = "<?= $base; ?>/dashboard/delete/" + id + "/" + window.location.search;
+    window.location.href = "<?= route('/'); ?>dashboard/delete/" + id + "/" + window.location.search;
   }
 </script>
 
@@ -371,4 +371,4 @@
   var mask = IMask(element, maskOptions);
 </script>
 
-<?php $render('footer'); ?>
+<?php render('footer'); ?>

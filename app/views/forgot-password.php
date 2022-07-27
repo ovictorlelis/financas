@@ -1,4 +1,4 @@
-<?php $render('header'); ?>
+<?php render('header'); ?>
 
 
 <div class="pb-3">
@@ -8,10 +8,9 @@
         <div class="col-lg-8 mb-5">
           <div class="row py-5 justify-content-center align-items-center">
             <div class="col-12 text-center">
-              <a class="text-white" href="<?= $base; ?>">
+              <a class="text-white" href="<?= route('/'); ?>">
                 <i class="fas fa-4x fa-piggy-bank"></i>
               </a>
-              <p class="mb-0 mt-4 fs-2">Entrar</p>
             </div>
           </div>
         </div>
@@ -28,7 +27,7 @@
           <div class="col-12 col-lg-4 mb-3">
             <div class="card border-0 text-dark">
               <div class="card-body">
-                <?php $render('message', ["message" => $message]); ?>
+                <?php render('message', ["message" => $message]); ?>
                 <form method="POST">
                   <div class="mb-3">
                     <label for="email">E-mail</label>
@@ -58,4 +57,4 @@
 
 </div>
 
-<?php $render('footer'); ?>
+<?php render('footer'); ?>

@@ -1,8 +1,8 @@
-<?php $render('header'); ?>
+<?php render('header'); ?>
 
 
 <div class="pb-3">
-  <?php $render('nav', ["user" => $user]); ?>
+  <?php render('nav', ["user" => $user]); ?>
 
   <div class="container" style="margin-top: -60px;">
     <div class="row justify-content-center">
@@ -18,16 +18,16 @@
 
                     <div class="d-flex align-items-center justify-content-between mb-3">
                       <p class="mb-0 fs-4">
-                        <?= ucfirst($wallet['name']); ?>
+                        <?= ucfirst($wallet->name); ?>
                       </p>
-                      <button type="button" onclick="dataRemove('<?= $wallet['id'] ?>', '<?= $wallet['name'] ?>')" class="btn-close btn-sm" data-bs-toggle="modal" data-bs-target="#removeWallet">
+                      <button type="button" onclick="dataRemove('<?= $wallet->id ?>', '<?= $wallet->name ?>')" class="btn-close btn-sm" data-bs-toggle="modal" data-bs-target="#removeWallet">
                       </button>
                     </div>
 
                     <div class="d-flex align-items-center">
                       <span>R$ &nbsp;</span>
-                      <span class="fs-2"><?= number_format($wallet['amount'], 2, ',', '.'); ?></span>
-                      <a href="" onclick="dataEdit('<?= $wallet['id']; ?>', '<?= $wallet['name']; ?>', '<?= $wallet['amount']; ?>')" class="btn text-muted btn-sm" data-bs-toggle="modal" data-bs-target="#editWallet">
+                      <span class="fs-2"><?= number_format($wallet->amount, 2, ',', '.'); ?></span>
+                      <a href="" onclick="dataEdit('<?= $wallet->id; ?>', '<?= $wallet->name; ?>', '<?= $wallet->amount; ?>')" class="btn text-muted btn-sm" data-bs-toggle="modal" data-bs-target="#editWallet">
                         <i class="fas fa-pen"></i>
                       </a>
                     </div>
@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  <?php $render('message', ["message" => $message]); ?>
+  <?php render('message', ["message" => $message]); ?>
 
   <div class="container">
     <div class="row justify-content-center">
@@ -162,7 +162,7 @@
 
     let form = document.querySelector("#formEditWallet");
 
-    form.action = "<?= $base; ?>/dashboard/wallet/edit/" + id + "/" + window.location.search;
+    form.action = "<?= route('/'); ?>dashboard/wallet/edit/" + id + "/" + window.location.search;
 
     modalEdit();
   }
@@ -179,8 +179,8 @@
   }
 
   function remove() {
-    window.location.href = "<?= $base; ?>/dashboard/wallet/delete/" + id;
+    window.location.href = "<?= route('/'); ?>dashboard/wallet/delete/" + id;
   }
 </script>
 
-<?php $render('footer'); ?>
+<?php render('footer'); ?>

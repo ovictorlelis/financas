@@ -1,0 +1,12 @@
+body {
+  background: #dfdfdf;
+}
+
+a {
+  color: #111;
+  text-decoration: none;
+}
+
+a.active {
+  color: blue;
+}

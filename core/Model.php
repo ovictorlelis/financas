@@ -2,9 +2,9 @@
 
 namespace core;
 
-use \core\Database;
-use \ClanCats\Hydrahon\Builder;
-use \ClanCats\Hydrahon\Query\Sql\FetchableInterface;
+use core\Database;
+use ClanCats\Hydrahon\Builder;
+use ClanCats\Hydrahon\Query\Sql\FetchableInterface;
 
 class Model
 {
@@ -25,7 +25,7 @@ class Model
                 $statement->execute($queryParameters);
 
                 if ($query instanceof FetchableInterface) {
-                    return $statement->fetchAll(\PDO::FETCH_ASSOC);
+                    return $statement->fetchAll(\PDO::FETCH_OBJ);
                 }
             });
         }
@@ -37,22 +37,29 @@ class Model
     {
         $className = explode('\\', get_called_class());
         $className = end($className);
-        return strtolower($className) . 's';
+        $className = strtolower($className);
+
+        if (str()->verifyLast($className, 'y')) {
+            $className = substr($className, 0, -1);
+            return $className . 'ies';
+        }
+
+        return $className . 's';
     }
 
-    public static function select($fields = [])
+    public static function select(array $fields = [])
     {
         self::_checkH();
         return self::$_h->select($fields);
     }
 
-    public static function insert($fields = [])
+    public static function insert(array $fields = [])
     {
         self::_checkH();
         return self::$_h->insert($fields);
     }
 
-    public static function update($fields = [])
+    public static function update(array $fields = [])
     {
         self::_checkH();
         return self::$_h->update($fields);

@@ -1,14 +1,15 @@
 <?php
 
-namespace src\controllers;
+namespace app\controllers;
 
-use \core\Controller;
-use src\middlewares\Message;
-use src\middlewares\UserMiddleware;
-use src\models\Invitation;
-use src\models\Transaction;
-use src\models\User;
-use src\models\Wallet;
+use core\Controller;
+use app\middlewares\Message;
+use app\middlewares\UserMiddleware;
+use app\models\Invitation;
+use app\models\Transaction;
+use app\models\User;
+use app\models\Wallet;
+use stdClass;
 
 class DashController extends Controller
 {
@@ -17,19 +18,19 @@ class DashController extends Controller
     public function __construct()
     {
         if (!UserMiddleware::auth()) {
-            $this->redirect('/');
+            route()->redirect('/');
         }
 
-        $this->user = (object) UserMiddleware::auth();
+        $this->user = UserMiddleware::auth();
     }
 
     public function index()
     {
         $message = Message::get();
 
-        $search = filter_input(INPUT_GET, 's', FILTER_SANITIZE_STRING) ?? '';
-        $filter = filter_input(INPUT_GET, 'f', FILTER_SANITIZE_STRING) ?? 'all';
-        $date = filter_input(INPUT_GET, 'd', FILTER_SANITIZE_STRING) ?? date('m') . '/' . date('Y');
+        $search = filter_input(INPUT_GET, 's') ?? '';
+        $filter = filter_input(INPUT_GET, 'f') ?? 'all';
+        $date = filter_input(INPUT_GET, 'd') ?? date('m') . '/' . date('Y');
 
         $filter = $filter == 'all' ? "%%" : $filter;
 
@@ -55,7 +56,7 @@ class DashController extends Controller
 
         $amountIncome = 0;
         foreach ($incomes as $income) {
-            $amountIncome += $income['amount'];
+            $amountIncome += $income->amount;
         }
 
         $expenses = $transaction
@@ -67,7 +68,7 @@ class DashController extends Controller
 
         $amountExpense = 0;
         foreach ($expenses as $expense) {
-            $amountExpense += $expense['amount'];
+            $amountExpense += $expense->amount;
         }
 
         $wallets = (new Wallet())
@@ -78,7 +79,7 @@ class DashController extends Controller
         $total = 0;
 
         foreach ($wallets as $wallet) {
-            $total += (float) $wallet['amount'];
+            $total += (float) $wallet->amount;
         }
 
         $this->render('dash', [
@@ -121,16 +122,15 @@ class DashController extends Controller
 
         $invitations = array_merge($familiesItems, $friendsItems);
 
-
         foreach ($invitations as $key => $invitation) {
-            if ($invitation['user_id']) {
-                $user = (new User())->select()->where('id', $invitation['user_id'])->first();
-                $invitations[$key]["user"] = [
-                    "name" => $user['id'] == $this->user->id ? 'Você' : $user['name'],
-                    "email" => $user['email'],
-                ];
+            if ($invitation->user_id) {
+                $user = (new User())->select()->where('id', $invitation->user_id)->first();
+                $invitations[$key]->user = new stdClass;
+                $invitations[$key]->user->name = $user->id == $this->user->id ? 'Você' : $user->name;
+                $invitations[$key]->user->email = $user->email;
             }
         }
+
 
         $friends = (new Invitation())
             ->select()
@@ -143,6 +143,7 @@ class DashController extends Controller
             ->where('tenant_id', $this->user->tenant_id)
             ->where('type', 'family')
             ->get();
+
 
 
         $this->render('invite', [
@@ -161,15 +162,15 @@ class DashController extends Controller
         $code = md5(rand(0, 555) . $this->user->email . rand(0, 555) . date('YmdHis'));
 
         if ($this->user->invitations < 1) {
-            $this->redirect("/dashboard/invite?message=750");
+            route()->redirect("/dashboard/invite?message=750");
         }
 
         if ($type != 'family' && $type != 'friend') {
-            $this->redirect("/dashboard/invite?message=650");
+            route()->redirect("/dashboard/invite?message=650");
         }
 
         if ($type == 'family' && $this->user->id != $this->user->tenant_id) {
-            $this->redirect("/dashboard/invite?message=730");
+            route()->redirect("/dashboard/invite?message=730");
         }
 
         (new User())
@@ -187,12 +188,12 @@ class DashController extends Controller
             ])
             ->execute();
 
-        $this->redirect("/dashboard/invite?message=710");
+        route()->redirect("/dashboard/invite?message=710");
     }
 
     public function deleteInvite($params)
     {
-        $id = filter_var($params['id'], FILTER_VALIDATE_INT);
+        $id = filter_var($params->id, FILTER_VALIDATE_INT);
 
         $invite = (new Invitation)
             ->select()
@@ -200,12 +201,12 @@ class DashController extends Controller
             ->where('tenant_id', $this->user->id)
             ->first();
 
-        if ($id != $invite['id']) {
-            $this->redirect("/dashboard/invite?message=650");
+        if ($id != $invite->id) {
+            route()->redirect("/dashboard/invite?message=650");
         }
 
 
-        if (!$invite['user_id']) {
+        if (!$invite->user_id) {
             (new User())
                 ->update([
                     'invitations' => $this->user->invitations + 1
@@ -219,10 +220,10 @@ class DashController extends Controller
                 ->where('id', $id)
                 ->execute();
 
-            $this->redirect("/dashboard/invite?message=715");
+            route()->redirect("/dashboard/invite?message=715");
         }
 
-        if ($invite['type'] == 'family' && $invite['user_id']) {
+        if ($invite->type == 'family' && $invite->user_id) {
 
             (new Invitation())
                 ->update([
@@ -234,22 +235,22 @@ class DashController extends Controller
 
             (new User())
                 ->update([
-                    "tenant_id" => $invite['user_id']
+                    "tenant_id" => $invite->user_id
                 ])
-                ->where("id", $invite['user_id'])
+                ->where("id", $invite->user_id)
                 ->execute();
 
             (new Wallet())
                 ->insert([
-                    "tenant_id" => $invite['user_id'],
+                    "tenant_id" => $invite->user_id,
                     "name" => 'Carteira',
                     "amount" => 0
                 ])
                 ->execute();
 
-            $this->redirect("/dashboard/invite?message=715");
+            route()->redirect("/dashboard/invite?message=715");
         }
-        $this->redirect("/dashboard/invite?message=715");
+        route()->redirect("/dashboard/invite?message=715");
     }
 
     public function wallet()
@@ -269,21 +270,21 @@ class DashController extends Controller
     public function editWallet($params)
     {
         $id = filter_input(INPUT_POST, 'edit_id', FILTER_VALIDATE_INT);
-        $name = filter_input(INPUT_POST, 'edit_name', FILTER_SANITIZE_STRING);
-        $amount = filter_input(INPUT_POST, 'edit_amount', FILTER_SANITIZE_STRING);
+        $name = filter_input(INPUT_POST, 'edit_name');
+        $amount = filter_input(INPUT_POST, 'edit_amount');
 
-        if (!$id || !$name && $id != $params['id']) {
-            $this->redirect('/dashboard/wallet?message=905');
+        if (!$id || !$name && $id != $params->id) {
+            route()->redirect('/dashboard/wallet?message=905');
         }
 
         $wallet = (new Wallet())
             ->select()
-            ->where('id', $params['id'])
+            ->where('id', $params->id)
             ->where('tenant_id', $this->user->tenant_id)
             ->first();
 
         if (!$wallet) {
-            $this->redirect('/dashboard/wallet?message=650');
+            route()->redirect('/dashboard/wallet?message=650');
         }
 
         $amount = $this->getAmount($amount);
@@ -293,19 +294,19 @@ class DashController extends Controller
                 "name" => $name,
                 "amount" => $amount
             ])
-            ->where("id", $params["id"])
+            ->where("id", $params->id)
             ->execute();
 
-        $this->redirect('/dashboard/wallet?message=620');
+        route()->redirect('/dashboard/wallet?message=620');
     }
 
     public function createWallet()
     {
-        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $amount = filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_STRING);
+        $name = filter_input(INPUT_POST, 'name');
+        $amount = filter_input(INPUT_POST, 'amount');
 
         if (!$name) {
-            $this->redirect('/dashboard/wallet?message=905');
+            route()->redirect('/dashboard/wallet?message=905');
         }
 
         $type = $this->getType($amount);
@@ -318,7 +319,7 @@ class DashController extends Controller
             "amount" => $type == 'expense' ? '-' . $amount : $amount
         ])->execute();
 
-        $this->redirect('/dashboard/wallet?message=610');
+        route()->redirect('/dashboard/wallet?message=610');
     }
 
     public function deleteWallet($id)
@@ -330,15 +331,15 @@ class DashController extends Controller
             ->get();
 
         if (count($userWallets) <= 1) {
-            $this->redirect('/dashboard/wallet?message=630');
+            route()->redirect('/dashboard/wallet?message=630');
         }
 
-        if ($wallet['tenant_id'] != $this->user->tenant_id) {
-            $this->redirect('/dashboard/wallet?message=525');
+        if ($wallet->tenant_id != $this->user->tenant_id) {
+            route()->redirect('/dashboard/wallet?message=525');
         }
 
         $wallet = (new Wallet())->delete()->where('id', $id)->execute();
-        $this->redirect('/dashboard/wallet?message=615');
+        route()->redirect('/dashboard/wallet?message=615');
     }
 
     public function profile()
@@ -352,12 +353,12 @@ class DashController extends Controller
 
     public function editProfile()
     {
-        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $name = filter_input(INPUT_POST, 'name');
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        $password = filter_input(INPUT_POST, 'password');
 
         if (!$name || !$email) {
-            $this->redirect("/dashboard/profile?message=905");
+            route()->redirect("/dashboard/profile?message=905");
         }
 
         (new User())
@@ -377,21 +378,21 @@ class DashController extends Controller
                 ->execute();
         }
 
-        $this->redirect("/dashboard/profile?message=215");
+        route()->redirect("/dashboard/profile?message=215");
     }
 
     public function create()
     {
-        $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
-        $amount = filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_STRING);
-        $date = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
+        $description = filter_input(INPUT_POST, 'description');
+        $amount = filter_input(INPUT_POST, 'amount');
+        $date = filter_input(INPUT_POST, 'date');
         $wallet = filter_input(INPUT_POST, 'wallet', FILTER_VALIDATE_INT);
 
         $url = $this->getFilters();
 
 
         if (!$description || !$amount || !$date) {
-            $this->redirect("/dashboard{$url}&message=905");
+            route()->redirect("/dashboard{$url}&message=905");
         }
 
         $userWallet = (new Wallet())
@@ -401,7 +402,7 @@ class DashController extends Controller
             ->first();
 
         if (!$userWallet) {
-            $this->redirect("/dashboard{$url}&message=910");
+            route()->redirect("/dashboard{$url}&message=910");
         }
 
 
@@ -410,9 +411,9 @@ class DashController extends Controller
         $amount = $this->getAmount($amount);
 
         if ($type == 'income') {
-            $balance = $userWallet['amount'] + $amount;
+            $balance = $userWallet->amount + $amount;
         } else {
-            $balance = $userWallet['amount'] - $amount;
+            $balance = $userWallet->amount - $amount;
         }
 
         $transaction = new Transaction();
@@ -427,7 +428,7 @@ class DashController extends Controller
             ])
             ->execute();
 
-        $this->redirect("/dashboard{$url}&message=510");
+        route()->redirect("/dashboard{$url}&message=510");
     }
 
     public function delete($id)
@@ -435,32 +436,32 @@ class DashController extends Controller
 
         $url = $this->getFilters();
 
-        $transaction = (new Transaction())->select()->where('id', $id)->first();
+        $transaction = (new Transaction())->select()->where('id', $id->id)->first();
 
-        if ($transaction['tenant_id'] != $this->user->tenant_id) {
-            $this->redirect("/dashboard{$url}&message=525");
+        if ($transaction->tenant_id != $this->user->tenant_id) {
+            route()->redirect("/dashboard{$url}&message=525");
         }
 
-        $walletId = $transaction['wallet_id'];
+        $walletId = $transaction->wallet_id;
 
         $currentWallet = (new Wallet())->select()->where('id', $walletId)->first();
 
 
-        if ($transaction['type'] == 'income') {
-            $currentBalance = $currentWallet['amount'] - $transaction['amount'];
+        if ($transaction->type == 'income') {
+            $currentBalance = $currentWallet->amount - $transaction->amount;
         } else {
-            $currentBalance = $currentWallet['amount'] + $transaction['amount'];
+            $currentBalance = $currentWallet->amount + $transaction->amount;
         }
 
         $transactionPaid = (new Transaction())
             ->select()
-            ->where('id', $id)
+            ->where('id', $id->id)
             ->where('paid', 1)
             ->first();
 
         $transaction = (new Transaction())
             ->delete()
-            ->where('id', $id)
+            ->where('id', $id->id)
             ->execute();
 
         if ($transactionPaid) {
@@ -473,18 +474,18 @@ class DashController extends Controller
                 ->execute();
         }
 
-        $this->redirect("/dashboard{$url}&message=515");
+        route()->redirect("/dashboard{$url}&message=515");
     }
 
     public function edit($params)
     {
         $url = $this->getFilters();
 
-        $id = filter_var($params['id'], FILTER_VALIDATE_INT);
-        $edit_description = filter_input(INPUT_POST, 'edit_description', FILTER_SANITIZE_STRING);
-        $edit_amount = filter_input(INPUT_POST, 'edit_amount', FILTER_SANITIZE_STRING);
-        $edit_wallet = filter_input(INPUT_POST, 'edit_wallet', FILTER_SANITIZE_STRING);
-        $edit_date = filter_input(INPUT_POST, 'edit_date', FILTER_SANITIZE_STRING);
+        $id = filter_var($params->id, FILTER_VALIDATE_INT);
+        $edit_description = filter_input(INPUT_POST, 'edit_description');
+        $edit_amount = filter_input(INPUT_POST, 'edit_amount');
+        $edit_wallet = filter_input(INPUT_POST, 'edit_wallet');
+        $edit_date = filter_input(INPUT_POST, 'edit_date');
 
         $transaction = (new Transaction())
             ->select()
@@ -493,15 +494,15 @@ class DashController extends Controller
             ->first();
 
         if (!$transaction) {
-            $this->redirect("/dashboard{$url}&message=650");
+            route()->redirect("/dashboard{$url}&message=650");
         }
 
 
         $type = $this->getType($edit_amount);
         $amount = $this->getAmount($edit_amount);
 
-        if ($transaction['paid'] == 1) {
-            $this->redirect("/dashboard{$url}&message=550");
+        if ($transaction->paid == 1) {
+            route()->redirect("/dashboard{$url}&message=550");
         }
 
         (new Transaction())
@@ -515,13 +516,13 @@ class DashController extends Controller
             ->where("id", $id)
             ->execute();
 
-        $this->redirect("/dashboard{$url}&message=520");
+        route()->redirect("/dashboard{$url}&message=520");
     }
 
     public function paid($params)
     {
-        $id = filter_var($params['id'], FILTER_VALIDATE_INT);
-        $bool = filter_var($params['bool'], FILTER_VALIDATE_BOOLEAN);
+        $id = filter_var($params->id, FILTER_VALIDATE_INT);
+        $bool = filter_var($params->bool, FILTER_VALIDATE_BOOLEAN);
 
         $url = $this->getFilters();
 
@@ -532,12 +533,12 @@ class DashController extends Controller
             ->first();
 
         if (!$transaction) {
-            $this->redirect("/dashboard{$url}?message=650");
+            route()->redirect("/dashboard{$url}?message=650");
         }
 
-        $walletId = $transaction['wallet_id'];
-        $transactionAmount = $transaction['amount'];
-        $transactionType = $transaction['type'];
+        $walletId = $transaction->wallet_id;
+        $transactionAmount = $transaction->amount;
+        $transactionType = $transaction->type;
 
         $wallet = (new Wallet())
             ->select()
@@ -562,11 +563,11 @@ class DashController extends Controller
                 ->execute();
         }
 
-        $balance = $this->newBalance($type, $transactionType, $wallet['amount'], $transactionAmount);
+        $balance = $this->newBalance($type, $transactionType, $wallet->amount, $transactionAmount);
 
         $this->updateWallet($balance, $walletId);
         $bool = $bool == 1 ? 530 : 540;
-        $this->redirect("/dashboard{$url}&message={$bool}");
+        route()->redirect("/dashboard{$url}&message={$bool}");
     }
 
     private function newBalance($type, $transactionType,  $currentAmount, $amount)
@@ -632,9 +633,9 @@ class DashController extends Controller
 
     private function getFilters()
     {
-        $search = filter_input(INPUT_GET, 's', FILTER_SANITIZE_STRING) ?? '';
-        $filter = filter_input(INPUT_GET, 'f', FILTER_SANITIZE_STRING) ?? 'all';
-        $date = filter_input(INPUT_GET, 'd', FILTER_SANITIZE_STRING) ?? date('m') . '/' . date('Y');
+        $search = filter_input(INPUT_GET, 's') ?? '';
+        $filter = filter_input(INPUT_GET, 'f') ?? 'all';
+        $date = filter_input(INPUT_GET, 'd') ?? date('m') . '/' . date('Y');
 
         return "?s={$search}&f={$filter}&d={$date}";
     }

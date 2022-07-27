@@ -1,8 +1,8 @@
-<?php $render('header'); ?>
+<?php render('header'); ?>
 
 
 <div class="pb-3">
-  <?php $render('nav', ["user" => $user]); ?>
+  <?php render('nav', ["user" => $user]); ?>
   <div class="container" style="margin-top: -60px;">
     <div class="row justify-content-center">
       <div class="col-lg-8">
@@ -11,7 +11,7 @@
             <div class="card border-0 text-dark">
               <div class="card-body">
                 <h1 class="text-center">Perfil</h1>
-                <?php $render('message', ["message" => $message]); ?>
+                <?php render('message', ["message" => $message]); ?>
                 <form method="POST">
                   <div class="row mt-3">
                     <div class="col-12">
@@ -50,4 +50,4 @@
 
 </div>
 
-<?php $render('footer'); ?>
+<?php render('footer'); ?>

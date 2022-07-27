@@ -1,8 +1,8 @@
-<?php $render('header'); ?>
+<?php render('header'); ?>
 
 
 <div class="pb-3">
-  <?php $render('nav', ["user" => $user]); ?>
+  <?php render('nav', ["user" => $user]); ?>
 
   <div class="container" style="margin-top: -60px;">
     <div class="row justify-content-center">
@@ -71,7 +71,7 @@
           </div>
 
           <div class="col-12">
-            <?php $render('message', ["message" => $message]); ?>
+            <?php render('message', ["message" => $message]); ?>
             <?php if ($invitations) :  ?>
               <div class="table-responsive">
                 <table>
@@ -87,7 +87,7 @@
 
                     <?php if ($boss) : ?>
                       <tr>
-                        <td><?= $boss['name']; ?></td>
+                        <td><?= $boss->name; ?></td>
                         <td>Administrador</td>
                         <td>
                         </td>
@@ -96,12 +96,12 @@
 
                     <?php foreach ($invitations as $invitation) : ?>
                       <tr>
-                        <td><?= $invitation['user']['name'] ?? $base . "/register?invite=" . $invitation['code']; ?></td>
-                        <td><?= $invitation['type'] == 'friend' ? 'Amigo' : 'Família'; ?></td>
+                        <td><?= $invitation->user->name ?? route('/') . "register?invite=" . $invitation->code; ?></td>
+                        <td><?= $invitation->type == 'friend' ? 'Amigo' : 'Família'; ?></td>
 
                         <td>
-                          <?php if ($invitation['type'] == 'family' || !isset($invitation['user']) && $invitation['type'] == 'friend') : ?>
-                            <a href="#" class="text-danger" onclick="dataRemove('<?= $invitation['id'] ?>')" data-bs-toggle="modal" data-bs-target="#removeTransaction"><i class="fas fa-trash"></i></a>
+                          <?php if ($invitation->type == 'family' || !isset($invitation->user) && $invitation->type == 'friend') : ?>
+                            <a href="#" class="text-danger" onclick="dataRemove('<?= $invitation->id ?>')" data-bs-toggle="modal" data-bs-target="#removeTransaction"><i class="fas fa-trash"></i></a>
                           <?php endif; ?>
                         </td>
 
@@ -196,7 +196,7 @@
   }
 
   function remove() {
-    window.location.href = "<?= $base; ?>/dashboard/invite/delete/" + id;
+    window.location.href = "<?= route('/'); ?>dashboard/invite/delete/" + id;
   }
 
   function modalEdit() {
@@ -227,4 +227,4 @@
   }
 </script>
 
-<?php $render('footer'); ?>
+<?php render('footer'); ?>

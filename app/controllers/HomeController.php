@@ -1,13 +1,13 @@
 <?php
 
-namespace src\controllers;
+namespace app\controllers;
 
-use \core\Controller;
-use src\middlewares\Message;
-use src\middlewares\UserMiddleware;
-use src\models\Invitation;
-use src\models\User;
-use src\models\Wallet;
+use core\Controller;
+use app\middlewares\Message;
+use app\middlewares\UserMiddleware;
+use app\models\Invitation;
+use app\models\User;
+use app\models\Wallet;
 
 class HomeController extends Controller
 {
@@ -17,7 +17,7 @@ class HomeController extends Controller
         $message = Message::get();
 
         if (UserMiddleware::auth()) {
-            $this->redirect('/dashboard');
+            route()->redirect('/dashboard');
         }
 
         $this->render('login', [
@@ -28,16 +28,16 @@ class HomeController extends Controller
     public function login()
     {
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $pass = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        $pass = filter_input(INPUT_POST, 'password');
 
         if (!$email && !$pass) {
-            $this->redirect('/?message=105');
+            route()->redirect('/?message=105');
         }
 
         if (UserMiddleware::login($email, $pass)) {
-            $this->redirect('/dashboard');
+            route()->redirect('/dashboard');
         }
-        $this->redirect('/?message=110');
+        route()->redirect('/?message=110');
     }
 
     public function register()
@@ -45,10 +45,10 @@ class HomeController extends Controller
         $message = Message::get();
 
         if (UserMiddleware::auth()) {
-            $this->redirect('/dashboard');
+            route()->redirect('/dashboard');
         }
 
-        $invite = filter_input(INPUT_GET, 'invite', FILTER_SANITIZE_STRING) ?? '';
+        $invite = filter_input(INPUT_GET, 'invite') ?? '';
         $this->render('register', [
             "invite" => $invite,
             "message" => $message
@@ -57,10 +57,10 @@ class HomeController extends Controller
 
     public function create()
     {
-        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $name = filter_input(INPUT_POST, 'name');
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-        $invite = filter_input(INPUT_POST, 'invite', FILTER_SANITIZE_STRING);
+        $password = filter_input(INPUT_POST, 'password');
+        $invite = filter_input(INPUT_POST, 'invite');
 
         $invitation = (new Invitation())
             ->select()
@@ -69,7 +69,10 @@ class HomeController extends Controller
 
 
         if (!$invitation) {
-            $this->redirect('/register?message=115');
+            route()->redirect('/register?message=115');
+        }
+        if (!!$invitation->user_id) {
+            route()->redirect('/register?message=115');
         }
 
         (new User())
@@ -87,10 +90,10 @@ class HomeController extends Controller
             ->where('email', $email)
             ->first();
 
-        if ($invitation['type'] == 'family') {
-            $tenant_id = $invitation['tenant_id'];
+        if ($invitation->type == 'family') {
+            $tenant_id = $invitation->tenant_id;
         } else {
-            $tenant_id = $user['id'];
+            $tenant_id = $user->id;
             (new Wallet())
                 ->insert([
                     "tenant_id" => $tenant_id,
@@ -109,19 +112,19 @@ class HomeController extends Controller
 
         (new Invitation())
             ->update([
-                "user_id" => $user['id']
+                "user_id" => $user->id
             ])
             ->where('code', $invite)
             ->execute();
 
         if (UserMiddleware::login($email, $password)) {
-            $this->redirect('/dashboard');
+            route()->redirect('/dashboard');
         }
     }
 
     public function logout()
     {
         session_destroy();
-        $this->redirect('/');
+        route()->redirect('/');
     }
 }

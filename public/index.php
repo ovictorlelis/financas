@@ -1,7 +1,7 @@
 <?php
-session_start();
-date_default_timezone_set('America/Sao_Paulo');
-require '../vendor/autoload.php';
-require '../src/routes.php';
 
-$router->run($router->routes);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require '../core/app/bootstrap.php';

@@ -1,8 +1,8 @@
 <?php
 
-namespace src\middlewares;
+namespace app\middlewares;
 
-use src\models\User;
+use app\models\User;
 
 class UserMiddleware
 {
@@ -25,9 +25,9 @@ class UserMiddleware
     $user = new User();
     $user = $user->select()->where('email', $email)->first();
 
-    if ($user && password_verify($pass, $user['password'])) {
+    if ($user && password_verify($pass, $user->password)) {
 
-      $token = self::token($email, $user['password']);
+      $token = self::token($email, $user->password);
 
       $_SESSION['token'] = $token;
       $user = new User();

@@ -1,4 +1,4 @@
-<?php $render('header'); ?>
+<?php render('header'); ?>
 
 
 <div class="pb-3">
@@ -8,7 +8,7 @@
         <div class="col-lg-8 mb-5">
           <div class="row py-5 justify-content-center align-items-center">
             <div class="col-12 text-center">
-              <a class="text-white" href="<?= $base; ?>">
+              <a class="text-white" href="<?= route('/'); ?>">
                 <i class="fas fa-4x fa-piggy-bank"></i>
               </a>
             </div>
@@ -29,7 +29,7 @@
               <div class="card-body text-center">
                 <h1><span class="fw-bold">Ops!</span></h1>
                 <p>Página não encontrada!</p>
-                <a class="text-decoration-none text-dark" href="<?= $base; ?>/">Voltar</a>
+                <a class="text-decoration-none text-dark" href="<?= route('/'); ?>">Voltar</a>
               </div>
             </div>
           </div>
@@ -41,4 +41,4 @@
 
 </div>
 
-<?php $render('footer'); ?>
+<?php render('footer'); ?>

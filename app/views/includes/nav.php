@@ -4,7 +4,7 @@
       <div class="col-lg-8 mb-5">
         <div class="row py-5 justify-content-center align-items-center">
           <div class="col-6 text-start">
-            <a class="text-white" href="<?= $base; ?>/dashboard">
+            <a class="text-white" href="<?= route('/dashboard'); ?>">
               <i class="fas fa-4x fa-piggy-bank"></i>
             </a>
           </div>
@@ -14,11 +14,11 @@
                 Olá, <?= $user->name ?>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a href="<?= $base; ?>/dashboard" class="dropdown-item">Dashboard</a></li>
-                <li><a href="<?= $base; ?>/dashboard/invite" class="dropdown-item">Convites</a></li>
-                <li><a href="<?= $base; ?>/dashboard/wallet" class="dropdown-item">Carteira</a></li>
-                <li><a href="<?= $base; ?>/dashboard/profile" class="dropdown-item">Perfil</a></li>
-                <li><a href="<?= $base; ?>/logout" class="dropdown-item">Sair</a></li>
+                <li><a href="<?= route('/dashboard'); ?>" class="dropdown-item">Dashboard</a></li>
+                <li><a href="<?= route('/dashboard/invite'); ?>" class="dropdown-item">Convites</a></li>
+                <li><a href="<?= route('/dashboard/wallet'); ?>" class="dropdown-item">Carteira</a></li>
+                <li><a href="<?= route('/dashboard/profile'); ?>" class="dropdown-item">Perfil</a></li>
+                <li><a href="<?= route('/logout'); ?>" class="dropdown-item">Sair</a></li>
               </ul>
             </div>
           </div>
