@@ -85,7 +85,8 @@ CREATE TABLE `wallets` (
   `id` int(11) NOT NULL,
   `tenant_id` int(11) NOT NULL,
   `name` varchar(75) COLLATE utf8_unicode_ci NOT NULL,
-  `amount` float NOT NULL
+  `amount` float NOT NULL,
+  `display` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

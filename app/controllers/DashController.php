@@ -79,7 +79,9 @@ class DashController extends Controller
         $total = 0;
 
         foreach ($wallets as $wallet) {
-            $total += (float) $wallet->amount;
+            if ($wallet->display) {
+                $total += (float) $wallet->amount;
+            }
         }
 
         $this->render('dash', [
@@ -272,6 +274,7 @@ class DashController extends Controller
         $id = filter_input(INPUT_POST, 'edit_id', FILTER_VALIDATE_INT);
         $name = filter_input(INPUT_POST, 'edit_name');
         $amount = filter_input(INPUT_POST, 'edit_amount');
+        $display = filter_input(INPUT_POST, 'edit_display');
 
         if (!$id || !$name && $id != $params->id) {
             return route()->redirect('/dashboard/wallet?message=905');
@@ -292,7 +295,8 @@ class DashController extends Controller
         $wallet = (new Wallet())
             ->update([
                 "name" => $name,
-                "amount" => $amount
+                "amount" => $amount,
+                "display" => $display ? 1 : 0
             ])
             ->where("id", $params->id)
             ->execute();
@@ -304,6 +308,7 @@ class DashController extends Controller
     {
         $name = filter_input(INPUT_POST, 'name');
         $amount = filter_input(INPUT_POST, 'amount');
+        $display = filter_input(INPUT_POST, 'display');
 
         if (!$name) {
             return route()->redirect('/dashboard/wallet?message=905');
@@ -316,7 +321,8 @@ class DashController extends Controller
         $wallet->insert([
             "tenant_id" => $this->user->tenant_id,
             "name" => $name,
-            "amount" => $type == 'expense' ? '-' . $amount : $amount
+            "amount" => $type == 'expense' ? '-' . $amount : $amount,
+            "display" => $display ? 1 : 0
         ])->execute();
 
         return route()->redirect('/dashboard/wallet?message=610');

@@ -27,7 +27,7 @@
                     <div class="d-flex align-items-center">
                       <span>R$ &nbsp;</span>
                       <span class="fs-2"><?= number_format($wallet->amount, 2, ',', '.'); ?></span>
-                      <a href="" onclick="dataEdit('<?= $wallet->id; ?>', '<?= $wallet->name; ?>', '<?= $wallet->amount; ?>')" class="btn text-muted btn-sm" data-bs-toggle="modal" data-bs-target="#editWallet">
+                      <a href="" onclick="dataEdit('<?= $wallet->id; ?>', '<?= $wallet->name; ?>', '<?= $wallet->amount; ?>', '<?= $wallet->display; ?>')" class="btn text-muted btn-sm" data-bs-toggle="modal" data-bs-target="#editWallet">
                         <i class="fas fa-pen"></i>
                       </a>
                     </div>
@@ -83,6 +83,10 @@
               <small>Use o sinal - para negativo e, (vírgula) para casas decimais</small>
             </div>
           </div>
+          <div class="mb-3">
+            <label for="display">Somar saldo</label>
+            <input type="checkbox" name="display" id="display" class="form-check-input d-block" checked>
+          </div>
         </div>
         <div class="row justify-content-center mb-3">
           <div class="col-6">
@@ -114,6 +118,10 @@
             <div class="form-text text-center">
               <small>Use o sinal - (negativo) para despesas e, (vírgula) para casas decimais</small>
             </div>
+          </div>
+          <div class="mb-3">
+            <label for="edit_display">Somar saldo</label>
+            <input type="checkbox" name="edit_display" id="edit_display" class="form-check-input d-block">
           </div>
         </div>
         <div class="row justify-content-center mb-3">
@@ -155,10 +163,11 @@
     removeTitle.innerHTML = title;
   }
 
-  function dataEdit(editId, editName, editAmount) {
+  function dataEdit(editId, editName, editAmount, editDisplay) {
     id = editId;
     name = editName;
     amount = editAmount;
+    display = editDisplay;
 
     let form = document.querySelector("#formEditWallet");
 
@@ -170,6 +179,7 @@
   function modalEdit() {
     document.querySelector("#edit_id").value = id;
     document.querySelector("#edit_name").value = name;
+    document.querySelector("#edit_display").checked = display == 1 ? true : false;
 
     amount = parseFloat(amount).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
