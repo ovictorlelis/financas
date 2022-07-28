@@ -63,7 +63,7 @@ class Message
       case 620:
         return 'Carteira alterada com sucesso!';
         break;
-      case 620:
+      case 630:
         return 'Você não pode remover sua última carteira!';
         break;
 
