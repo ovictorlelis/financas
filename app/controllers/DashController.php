@@ -324,7 +324,7 @@ class DashController extends Controller
 
     public function deleteWallet($id)
     {
-        $wallet = (new Wallet())->select()->where('id', $id)->first();
+        $wallet = (new Wallet())->select()->where('id', $id->id)->first();
         $userWallets = (new Wallet())
             ->select()
             ->where('tenant_id', $this->user->tenant_id)
@@ -338,7 +338,7 @@ class DashController extends Controller
             return route()->redirect('/dashboard/wallet?message=525');
         }
 
-        $wallet = (new Wallet())->delete()->where('id', $id)->execute();
+        $wallet = (new Wallet())->delete()->where('id', $id->id)->execute();
         return route()->redirect('/dashboard/wallet?message=615');
     }
 
