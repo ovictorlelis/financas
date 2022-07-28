@@ -7,9 +7,10 @@ class Request
 
     public static function url()
     {
-        $url = filter_input(INPUT_GET, 'request') ?? '';
+        $url = $_SERVER['REQUEST_URI'] ?? '';
         $url = str_replace(getenv('APP_DIR'), '', $url);
-        return '/' . $url;
+
+        return $url;
     }
 
     public static function method()
