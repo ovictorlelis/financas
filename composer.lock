@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbc9adb5ad0c7d54d0c2f8fd4cd5d3ad",
+    "content-hash": "74d6eaa0537cb741e9c81dac534f8893",
     "packages": [
         {
             "name": "clancats/hydrahon",
@@ -109,7 +109,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.0.0"
+        "php": ">=7.4"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
