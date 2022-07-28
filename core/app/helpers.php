@@ -23,11 +23,17 @@ function old(string $key = null)
   return $data;
 }
 
-function session(mixed $key = null)
+/**
+ * @param mixed $key
+ **/
+function session($key = null)
 {
   $data = new class
   {
-    public function add(mixed $key, string $content)
+    /**
+     * @param mixed $key
+     **/
+    public function add($key, string $content)
     {
       if (is_array($key)) {
         return $_SESSION[$key[0]][$key[1]] = $content;
@@ -36,7 +42,10 @@ function session(mixed $key = null)
       return $_SESSION[$key] = $content;
     }
 
-    public function has(mixed $key)
+    /**
+     * @param mixed $key
+     **/
+    public function has($key)
     {
       if (is_array($key)) {
         return isset($_SESSION[$key[0]][$key[1]]) ? true : false;
@@ -45,7 +54,10 @@ function session(mixed $key = null)
       return isset($_SESSION[$key]) ? true : false;
     }
 
-    public function show(mixed $key)
+    /**
+     * @param mixed $key
+     **/
+    public function show($key)
     {
       if (is_array($key)) {
         return isset($_SESSION[$key[0]][$key[1]]) ? $_SESSION[$key[0]][$key[1]] : '';
@@ -54,7 +66,10 @@ function session(mixed $key = null)
       return isset($_SESSION[$key]) ? $_SESSION[$key] : '';
     }
 
-    public function get(mixed $key)
+    /**
+     * @param mixed $key
+     **/
+    public function get($key)
     {
       if (is_array($key)) {
         $get = isset($_SESSION[$key[0]][$key[1]]) ? $_SESSION[$key[0]][$key[1]] : '';
