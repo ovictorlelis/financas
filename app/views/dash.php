@@ -332,8 +332,6 @@
     document.querySelector("#edit_id").value = id;
     document.querySelector("#edit_description").value = description;
 
-
-
     editWallets.forEach(wallet => {
       if (wallet.id == walletId) {
         wallet.setAttribute('selected', true);

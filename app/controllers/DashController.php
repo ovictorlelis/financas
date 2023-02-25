@@ -415,7 +415,7 @@ class DashController extends Controller
 
 
         $type = $this->getType($amount);
-        $amount = $this->getAmount($amount);
+        $amount = $this->getAmount($amount, true);
 
         if ($type == 'income') {
             $balance = $userWallet->amount + $amount;
@@ -506,7 +506,7 @@ class DashController extends Controller
 
 
         $type = $this->getType($edit_amount);
-        $amount = $this->getAmount($edit_amount);
+        $amount = $this->getAmount($edit_amount, true);
 
         if ($transaction->paid == 1) {
             return route()->redirect("/dashboard{$url}&message=550");
@@ -627,13 +627,19 @@ class DashController extends Controller
         return strpos($amount, '-') !== false ? 'expense' : 'income';
     }
 
-    private function getAmount($amount)
+    private function getAmount($amount, $replace = false)
     {
         $amount = str_replace(".", "", $amount);
         $amount = str_replace(",", ".", $amount);
+
         if (!is_numeric($amount)) {
             $amount = 0;
         }
+
+        if ($replace) {
+            $amount = str_replace("-", "", $amount);
+        }
+
         return $amount;
     }
 
