@@ -84,7 +84,7 @@ class DashController extends Controller
             }
         }
 
-        $total = ($total - $amountIncome) - $amountExpense;
+        $total = $total - abs($amountIncome - $amountExpense);
         $this->render('dash', [
             "user" => $this->user,
             "transactions" => $transactions,
