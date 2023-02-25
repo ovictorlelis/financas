@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74d6eaa0537cb741e9c81dac534f8893",
+    "content-hash": "1eaad797e0b0c0ccef600d157817b278",
     "packages": [
         {
             "name": "clancats/hydrahon",
@@ -56,50 +56,6 @@
                 "source": "https://github.com/ClanCats/Hydrahon/tree/v1.1.14"
             },
             "time": "2020-09-30T14:43:29+00:00"
-        },
-        {
-            "name": "victorlelis/dotenv",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/victorlelis/dotenv.git",
-                "reference": "0365a75f687b61815e64a7a999b23ceee091bb46"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/victorlelis/dotenv/zipball/0365a75f687b61815e64a7a999b23ceee091bb46",
-                "reference": "0365a75f687b61815e64a7a999b23ceee091bb46",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "VictorLelis\\DotEnv\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Victor Lelis",
-                    "email": "eu@ovictor.com.br",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Um simples gerenciador de variáveis de ambiente",
-            "keywords": [
-                "dotenv"
-            ],
-            "support": {
-                "issues": "https://github.com/victorlelis/dotenv/issues",
-                "source": "https://github.com/victorlelis/dotenv/tree/v1.0.0"
-            },
-            "time": "2022-07-22T18:05:04+00:00"
         }
     ],
     "packages-dev": [],

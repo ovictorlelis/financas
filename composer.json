@@ -2,9 +2,8 @@
   "name": "victorlelis/mvc",
   "description": "MVC Simples",
   "require": {
-    "clancats/hydrahon": "^1.1",
-    "victorlelis/dotenv": "^1.0",
-    "php": ">=7.4"
+    "php": ">=7.4",
+    "clancats/hydrahon": "^1.1"
   },
   "autoload": {
     "psr-4": {
