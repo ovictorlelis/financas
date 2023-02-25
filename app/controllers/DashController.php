@@ -84,6 +84,7 @@ class DashController extends Controller
             }
         }
 
+        $total = ($total - $amountIncome) - $amountExpense;
         $this->render('dash', [
             "user" => $this->user,
             "transactions" => $transactions,
@@ -628,7 +629,6 @@ class DashController extends Controller
 
     private function getAmount($amount)
     {
-        $amount = str_replace('-', '', $amount);
         $amount = str_replace(".", "", $amount);
         $amount = str_replace(",", ".", $amount);
         if (!is_numeric($amount)) {
