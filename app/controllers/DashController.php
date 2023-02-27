@@ -84,7 +84,6 @@ class DashController extends Controller
             }
         }
 
-        $total = $total - abs($amountIncome - $amountExpense);
         $this->render('dash', [
             "user" => $this->user,
             "transactions" => $transactions,
@@ -133,7 +132,6 @@ class DashController extends Controller
                 $invitations[$key]->user->email = $user->email;
             }
         }
-
 
         $friends = (new Invitation())
             ->select()
@@ -411,8 +409,6 @@ class DashController extends Controller
         if (!$userWallet) {
             return route()->redirect("/dashboard{$url}&message=910");
         }
-
-
 
         $type = $this->getType($amount);
         $amount = $this->getAmount($amount, true);
