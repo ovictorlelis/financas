@@ -119,11 +119,11 @@
 
                       <?php foreach ($transactions as $transaction) : ?>
                         <tr>
-                          <td><?= ucfirst($transaction->description); ?></td>
-                          <td class="<?= $transaction->type == 'expense' ? 'text-danger' : 'text-success'; ?>">
+                          <td style="<?= $transaction->paid ? 'text-decoration: line-through;' : ''; ?>"><?= ucfirst($transaction->description); ?></td>
+                          <td style="<?= $transaction->paid ? 'text-decoration: line-through;' : ''; ?>" class="<?= $transaction->type == 'expense' ? 'text-danger' : 'text-success'; ?>">
                             R$ <?= number_format($transaction->amount, 2, ',', '.'); ?>
                           </td>
-                          <td class="text-muted">
+                          <td style="<?= $transaction->paid ? 'text-decoration: line-through;' : ''; ?>" class="text-muted">
                             <?= (new DateTime($transaction->date))->format('d/m/Y'); ?>
                           </td>
                           <td>

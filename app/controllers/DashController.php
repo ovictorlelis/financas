@@ -44,7 +44,7 @@ class DashController extends Controller
             ->where('description', 'LIKE', "%{$search}%")
             ->where('type', 'LIKE', "{$filter}")
             ->where('date', 'LIKE', "%{$dateSearch}%")
-            ->orderBy(['date', 'id'], 'desc')
+            ->orderBy('date', 'asc')
             ->get();
 
         $incomes = $transaction
