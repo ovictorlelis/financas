@@ -85,6 +85,7 @@
                         <option value="all" <?= isset($filter) && $filter == 'all' ? 'selected' : '' ?>>Todos</option>
                         <option value="income" <?= isset($filter) && $filter == 'income' ? 'selected' : '' ?>>Receita</option>
                         <option value="expense" <?= isset($filter) && $filter == 'expense' ? 'selected' : '' ?>>Despesa</option>
+                        <option value="pending" <?= isset($filter) && $filter == 'pending' ? 'selected' : '' ?>>Pendente</option>
                       </select>
                     </div>
                     <div class="col-lg-3 mb-lg-0 mb-2">

@@ -38,14 +38,26 @@ class DashController extends Controller
         $dateSearch = $dateSearch[1] . '-' . $dateSearch[0];
 
         $transaction = new Transaction();
-        $transactions = $transaction
-            ->select()
-            ->where('tenant_id', $this->user->tenant_id)
-            ->where('description', 'LIKE', "%{$search}%")
-            ->where('type', 'LIKE', "{$filter}")
-            ->where('date', 'LIKE', "%{$dateSearch}%")
-            ->orderBy('date', 'asc')
-            ->get();
+
+        if ($filter == 'pending') {
+            $transactions = $transaction
+                ->select()
+                ->where('tenant_id', $this->user->tenant_id)
+                ->where('description', 'LIKE', "%{$search}%")
+                ->where('paid', 0)
+                ->where('date', 'LIKE', "%{$dateSearch}%")
+                ->orderBy('date', 'asc')
+                ->get();
+        } else {
+            $transactions = $transaction
+                ->select()
+                ->where('tenant_id', $this->user->tenant_id)
+                ->where('description', 'LIKE', "%{$search}%")
+                ->where('type', 'LIKE', "{$filter}")
+                ->where('date', 'LIKE', "%{$dateSearch}%")
+                ->orderBy('date', 'asc')
+                ->get();
+        }
 
         $incomes = $transaction
             ->select()
