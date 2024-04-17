@@ -32,7 +32,7 @@ class DashController extends Controller
         $filter = filter_input(INPUT_GET, 'f') ?? 'pending';
         $date = filter_input(INPUT_GET, 'd') ?? date('m') . '/' . date('Y');
 
-        $filter = $filter == 'all' ? "%%" : $filter;
+        $filter = $filter == 'pending' ? "%%" : $filter;
 
         $dateSearch = explode("/", $date);
         $dateSearch = $dateSearch[1] . '-' . $dateSearch[0];
@@ -83,6 +83,19 @@ class DashController extends Controller
             $amountExpense += $expense->amount;
         }
 
+        $pendings = $transaction
+            ->select()
+            ->where('tenant_id', $this->user->tenant_id)
+            ->where('type', 'LIKE', "expense")
+            ->where('paid', 0)
+            ->where('date', 'LIKE', "%{$dateSearch}%")
+            ->get();
+
+        $amountPending = 0;
+        foreach ($pendings as $pending) {
+            $amountPending += $pending->amount;
+        }
+
         $wallets = (new Wallet())
             ->select()
             ->where('tenant_id', $this->user->tenant_id)
@@ -102,6 +115,7 @@ class DashController extends Controller
             "wallets" => $wallets,
             "incomes" => number_format($amountIncome, 2, ',', '.'),
             "expenses" => number_format($amountExpense, 2, ',', '.'),
+            "pending" => number_format($amountPending, 2, ',', '.'),
             "total" => number_format($total, 2, ',', '.'),
             "search" => $search,
             "filter" => $filter,

@@ -9,7 +9,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="row">
-          <div class="col-12 col-lg-4 mb-3">
+          <div class="col-12 col-md-6 col-xl-3 mb-3">
             <div class="card border-0 bg-white text-dark">
               <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -24,7 +24,7 @@
             </div>
           </div>
 
-          <div class="col-12 col-lg-4 mb-3">
+          <div class="col-12 col-md-6 col-xl-3 mb-3">
             <div class="card border-0 bg-white text-dark">
               <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -39,7 +39,22 @@
             </div>
           </div>
 
-          <div class="col-12 col-lg-4 mb-3">
+          <div class="col-12 col-md-6 col-xl-3 mb-3">
+            <div class="card border-0 bg-white text-dark">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <p class="mb-0 fs-4">Pendente</p>
+                  <i class="fs-4 text-danger fas fa-info"></i>
+                </div>
+                <div class="d-flex align-items-center text-danger">
+                  <span>R$ &nbsp;</span>
+                  <span class="fs-2"><?= $pending; ?></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-3 mb-3">
             <div class="card border-0 bg-dark text-white">
               <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-3">
