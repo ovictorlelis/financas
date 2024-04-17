@@ -29,7 +29,7 @@ class DashController extends Controller
         $message = Message::get();
 
         $search = filter_input(INPUT_GET, 's') ?? '';
-        $filter = filter_input(INPUT_GET, 'f') ?? 'all';
+        $filter = filter_input(INPUT_GET, 'f') ?? 'pending';
         $date = filter_input(INPUT_GET, 'd') ?? date('m') . '/' . date('Y');
 
         $filter = $filter == 'all' ? "%%" : $filter;
