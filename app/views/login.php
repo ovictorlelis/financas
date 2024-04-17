@@ -11,7 +11,6 @@
               <a class="text-white" href="<?= route('/'); ?>">
                 <i class="fas fa-4x fa-piggy-bank"></i>
               </a>
-              <p class="mb-0 mt-4 fs-2">Entrar</p>
             </div>
           </div>
         </div>
