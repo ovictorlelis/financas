@@ -32,7 +32,7 @@ class DashController extends Controller
         $filter = filter_input(INPUT_GET, 'f') ?? 'pending';
         $date = filter_input(INPUT_GET, 'd') ?? date('m') . '/' . date('Y');
 
-        $filter = $filter == 'pending' ? "%%" : $filter;
+        $filter = $filter == 'all' ? "%%" : $filter;
 
         $dateSearch = explode("/", $date);
         $dateSearch = $dateSearch[1] . '-' . $dateSearch[0];
